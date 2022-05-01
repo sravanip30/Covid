@@ -1,0 +1,111 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "covid-reposrting-adf"
+		},
+		"ls_adls_covidreportingadls_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adls_covidreportingadls'"
+		},
+		"ls_blob_covidresa_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_blob_covidresa'"
+		},
+		"ls_databricks_covid_population_file_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_databricks_covid_population_file'"
+		},
+		"ls_sql_covid_db_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sql_covid_db'"
+		},
+		"ls_adls_covidreportingadls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://covidreportingadls.dfs.core.windows.net"
+		},
+		"ls_http_ecdc_open_europe_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().baseURL}"
+		},
+		"tr_population_data_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/8a78d0ae-ad60-44d2-8eab-cee631e58f62/resourceGroups/covid-reporting-rg/providers/Microsoft.Storage/storageAccounts/covidresa"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "covid-reposrting-adf_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_adls_covidreportingadls_accountKey": {
+						"value": "[parameters('ls_adls_covidreportingadls_accountKey')]"
+					},
+					"ls_blob_covidresa_connectionString": {
+						"value": "[parameters('ls_blob_covidresa_connectionString')]"
+					},
+					"ls_databricks_covid_population_file_accessToken": {
+						"value": "[parameters('ls_databricks_covid_population_file_accessToken')]"
+					},
+					"ls_sql_covid_db_connectionString": {
+						"value": "[parameters('ls_sql_covid_db_connectionString')]"
+					},
+					"ls_adls_covidreportingadls_properties_typeProperties_url": {
+						"value": "[parameters('ls_adls_covidreportingadls_properties_typeProperties_url')]"
+					},
+					"ls_http_ecdc_open_europe_properties_typeProperties_url": {
+						"value": "[parameters('ls_http_ecdc_open_europe_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "covid-reposrting-adf_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"tr_population_data_properties_typeProperties_scope": {
+						"value": "[parameters('tr_population_data_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'covid-reposrting-adf_ArmTemplate_0')]"
+			]
+		}
+	]
+}

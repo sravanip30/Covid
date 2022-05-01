@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "covid-reposrting-adf"
+		},
+		"ls_adls_covidreportingadls_accountKey": {
+			"value": ""
+		},
+		"ls_blob_covidresa_connectionString": {
+			"value": ""
+		},
+		"ls_databricks_covid_population_file_accessToken": {
+			"value": ""
+		},
+		"ls_sql_covid_db_connectionString": {
+			"value": ""
+		},
+		"ls_adls_covidreportingadls_properties_typeProperties_url": {
+			"value": "https://covidreportingadls.dfs.core.windows.net"
+		},
+		"ls_http_ecdc_open_europe_properties_typeProperties_url": {
+			"value": "@{linkedService().baseURL}"
+		},
+		"tr_population_data_properties_typeProperties_scope": {
+			"value": "/subscriptions/8a78d0ae-ad60-44d2-8eab-cee631e58f62/resourceGroups/covid-reporting-rg/providers/Microsoft.Storage/storageAccounts/covidresa"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
